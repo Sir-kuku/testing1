@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body class="phone-optimized clean-state">
@@ -235,15 +236,21 @@
                         </a>
                     </div>
 
-                    <div class="user-profile" id="userProfile">
-                        <div class="user-avatar" id="userAvatar">JD</div>
+                    <!-- <div class="user-profile" id="userProfile"> -->
+                        <!-- <div class="user-avatar" id="userAvatar">JD</div>
                         <div class="user-info">
                             <div class="user-name" id="userName">kelly west</div>
                             <div class="user-email" id="userEmail">west@example.com</div>
+                        </div> -->
+                        <div class="user-profile" id="userProfile">
+                            <div class="user-avatar" id="userAvatar">JD</div>
+                            <div class="user-info">
+                            <div class="user-name" id="userName">kelly west</div>
+                            <div class="user-email" id="userEmail">west@example.com</div>
                         </div>
-                        <button class="logout-btn touch-friendly" onclick="logout()">
+                        <!-- <button class="logout-btn touch-friendly" onclick="logout()">
                             <i class="fas fa-sign-out-alt"></i>
-                        </button>
+                        </button> -->
                     </div>
 
                     <button class="connect-btn touch-friendly" id="connectBtn">
@@ -253,7 +260,7 @@
                     <button class="menu-toggle touch-friendly" id="menuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                </div>
+                <!-- </div> -->
             </div>
         </nav>
 
@@ -1491,44 +1498,50 @@
                 }
             }
 
-            logout() {
-                console.log('Logging out user...');
+            // logout() {
+            //     console.log('Logging out user...');
 
-                // Clear all session data
-                sessionStorage.removeItem(this.STORAGE_KEYS.SESSION);
+            //     // Clear all session data
+            //     sessionStorage.removeItem(this.STORAGE_KEYS.SESSION);
 
-                // Clear platform data
-                if (window.platform) {
-                    if (window.platform.autoTradeInterval) {
-                        clearInterval(window.platform.autoTradeInterval);
-                    }
-                    window.platform.isWalletConnected = false;
-                    window.platform.hasPurchased = false;
-                }
+            //     // Clear platform data
+            //     if (window.platform) {
+            //         if (window.platform.autoTradeInterval) {
+            //             clearInterval(window.platform.autoTradeInterval);
+            //         }
+            //         window.platform.isWalletConnected = false;
+            //         window.platform.hasPurchased = false;
+            //     }
 
-                // Hide main app, show auth
-                const mainApp = document.getElementById('mainApp');
-                const authContainer = document.getElementById('authContainer');
+            //     // Hide main app, show auth
+            //     const mainApp = document.getElementById('mainApp');
+            //     const authContainer = document.getElementById('authContainer');
 
-                if (mainApp) {
-                    mainApp.classList.remove('active');
-                    mainApp.style.display = 'none';
-                }
+            //     if (mainApp) {
+            //         mainApp.classList.remove('active');
+            //         mainApp.style.display = 'none';
+            //     }
 
-                if (authContainer) {
-                    authContainer.style.display = 'flex';
-                }
+            //     if (authContainer) {
+            //         authContainer.style.display = 'flex';
+            //     }
 
-                // Reset to login form with blank inputs
-                this.showLogin();
-                this.ensureBlankInputs();
+            //     // Reset to login form with blank inputs
+            //     this.showLogin();
+            //     this.ensureBlankInputs();
 
-                // Clear any navigation menu
-                const navMenu = document.getElementById('navMenu');
-                if (navMenu) navMenu.classList.remove('active');
+            //     // Clear any navigation menu
+            //     const navMenu = document.getElementById('navMenu');
+            //     if (navMenu) navMenu.classList.remove('active');
 
-                console.log('Logout complete - user redirected to login');
-            }
+            //     console.log('Logout complete - user redirected to login');
+            // }
+            //     // Replace it with this empty method:
+            //     logout() {
+            //     console.log('Logout functionality has been disabled');
+            //     // Logout is intentionally disabled
+            //     return false;
+            // }   
 
             showLogin() {
                 document.getElementById('signupForm').classList.remove('active');
@@ -1651,10 +1664,14 @@
             if (authSystem) authSystem.openForgotPassword();
         };
 
-        window.logout = function () {
-            if (authSystem) authSystem.logout();
-        };
+        // window.logout = function () {
+        //     if (authSystem) authSystem.logout();
+        // };
         
+        window.logout = function () {
+        console.log('Logout is disabled');
+        return false;
+        };
 
         // Fix for forgot password back link
         document.addEventListener('DOMContentLoaded', function () {

